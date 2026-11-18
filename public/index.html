@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant — Praktikum PWS</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <main class="chat-container">
+        <header class="chat-header">
+            <div class="header-info">
+                <div class="avatar-bot" aria-label="Ikon Kucing">
+                    <!-- SVG Kucing Cute Inline (Tanpa Impor) -->
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Telinga & Kepala -->
+                        <path d="M12 5c2.97 0 5.43.82 6.84 2.13L21 4v8.5c0 4.69-4.03 8.5-9 8.5s-9-3.81-9-8.5V4l2.16 3.13C6.57 5.82 9.03 5 12 5z" fill="#ede9fe" stroke="#7c3aed"/>
+                        <!-- Mata -->
+                        <circle cx="9" cy="12" r="1.2" fill="#7c3aed" stroke="none"/>
+                        <circle cx="15" cy="12" r="1.2" fill="#7c3aed" stroke="none"/>
+                        <!-- Hidung & Mulut -->
+                        <path d="M11 14.5l1 1 1-1" stroke="#7c3aed"/>
+                        <path d="M9.5 16.5c.8.8 2.2.8 2.5 0 .3.8 1.7.8 2.5 0" stroke="#7c3aed"/>
+                        <!-- Kumis Kiri & Kanan -->
+                        <line x1="2" y1="12.5" x2="5.5" y2="13" stroke="#7c3aed"/>
+                        <line x1="2" y1="15" x2="5.5" y2="14.5" stroke="#7c3aed"/>
+                        <line x1="22" y1="12.5" x2="18.5" y2="13" stroke="#7c3aed"/>
+                        <line x1="22" y1="15" x2="18.5" y2="14.5" stroke="#7c3aed"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Nemotron AI</h1>
+                    <p class="status"><span class="dot"></span> Online • Streaming Mode</p>
+                </div>
+            </div>
+            <button id="clear-btn" class="clear-btn" title="Hapus Percakapan">Bersihkan</button>
+        </header>
+
+        <section id="chat-box" class="chat-box">
+            <div class="message bot-message">
+                <div class="bubble">
+                    Halo!  Ada yang bisa saya bantu hari ini? Silakan ketik pertanyaanmu di bawah.
+                </div>
+            </div>
+        </section>
+
+        <form id="chat-form" class="chat-input-area">
+            <textarea 
+                id="user-input" 
+                rows="1" 
+                placeholder="Tulis pesan di sini..." 
+                required
+            ></textarea>
+            <button type="submit" id="send-btn" aria-label="Kirim Pesan">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </form>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

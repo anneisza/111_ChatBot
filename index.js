@@ -34,7 +34,7 @@ app.post("/api/chat", async (req, res) => {
                 },
 
                 body: JSON.stringify({
-                    model: "nvidia/nemotron-3-super-120b-a12b:free",
+                    model: "nvidia/nemotron-3.5-super-vl:free",
                     messages: messages,
                     temperature: 0.7,
                     max_tokens:1000,
