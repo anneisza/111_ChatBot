@@ -50,9 +50,7 @@ app.post("/api/chat", async (req, res) => {
 
             return res.status(response.status).json({error: errorData});
         }
-    }
-
-    //header untuk streaming
+        //header untuk streaming
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connnection", "keep-alive");
@@ -95,4 +93,22 @@ app.post("/api/chat", async (req, res) => {
             //belum pas posisi
             res.write("data: [DONE]\n\n");
             res.end()
+    }catch(error) {
+
+        console.error("Server Error:", error);
+
+        if(!res.headersSent){
+            res.status(500).json({
+                error: "Terjadi kesalahan pada server"
+            });
+        }else{
+            res.write(
+                `data: ${JSON.stringify(
+                    "Terjadi kesalahan pada server"
+                )}\n\n`
+            );
+
+            res.end();
+        }
+    } 
 });
