@@ -13,3 +13,86 @@ app.get("/", (req, res) => {
     res.redirect("/index.html");
 });
 
+app.post("/api/chat", async (req, res) => {
+    try{
+        const messages = req.body.messages;
+
+        if(!messages || !Array.isArray(messages)){
+            return res.status(400).json({
+                error: "Messages harus berupa array"
+                
+            });
+        }
+        const response = await fetch(
+            "https://openrouter.ai/api/v1/chat/completions",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer $(process.env.OPENROUTER_API_KEY)`
+                },
+
+                body: JSON.stringify({
+                    model: "nvdia/nemotron-3.5 super-v1:free",
+                    messages: messages,
+                    temperature: 0.7,
+                    max_tokens:1000,
+                    stream: true
+                })
+            }
+        );
+
+        if(!response.ok){
+            const errorData = await response.text();
+
+            console.error("OpenRouter Error:", errorData);
+
+            return res.status(response.status).json({error: errorData});
+        }
+    }
+
+    //header untuk streaming
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connnection", "keep-alive");
+
+    const reader
+    //ketinggalan
+
+            //simpan bagian terakhir karena mungkin belum lengkap
+            buffer = lines.pop();
+
+            for(const line of lines) {
+                const trimmedLine = line.trim();
+
+                if(!trimmedLine){
+                    continue;
+                }
+
+                if(!trimmedLine.startWith("data:")){
+                    continue;
+                }
+                //ketinggalan
+
+                try {
+                    const json = JSON.parse(data);
+
+                    const content =
+                    json.choices?[0]?.delta?.content;
+
+                    if(content){
+                        res.write(`data: ${JSON.stringify(content)}\n\n`);
+                    }
+                }catch (error){
+                    console.error(
+                        "Gagal parsing streaming data:",
+                        error
+                    );
+                }
+            }
+        
+            //belum pas posisi
+            res.write("data: [DONE]\n\n");
+            res.end()
+});
