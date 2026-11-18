@@ -30,11 +30,11 @@ app.post("/api/chat", async (req, res) => {
 
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer $(process.env.OPENROUTER_API_KEY)`
+                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`
                 },
 
                 body: JSON.stringify({
-                    model: "nvdia/nemotron-3.5 super-v1:free",
+                    model: "nvidia/nemotron-3-super-120b-a12b:free",
                     messages: messages,
                     temperature: 0.7,
                     max_tokens:1000,
@@ -53,10 +53,21 @@ app.post("/api/chat", async (req, res) => {
         //header untuk streaming
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connnection", "keep-alive");
+    res.setHeader("Connection", "keep-alive");
 
-    const reader
-    //ketinggalan
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+    let buffer = "";
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+            break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+
 
             //simpan bagian terakhir karena mungkin belum lengkap
             buffer = lines.pop();
@@ -68,16 +79,22 @@ app.post("/api/chat", async (req, res) => {
                     continue;
                 }
 
-                if(!trimmedLine.startWith("data:")){
+                if(!trimmedLine.startsWith("data:")){
                     continue;
                 }
-                //ketinggalan
+
+                const data = trimmedLine.replace(/^data:\s*/, "");
+
+                if (data === "[DONE]") {
+                    continue;
+                }
+
 
                 try {
                     const json = JSON.parse(data);
 
                     const content =
-                    json.choices?[0]?.delta?.content;
+                    json.choices?.[0]?.delta?.content;
 
                     if(content){
                         res.write(`data: ${JSON.stringify(content)}\n\n`);
@@ -89,10 +106,11 @@ app.post("/api/chat", async (req, res) => {
                     );
                 }
             }
+        }
+        res.write("data: [DONE]\n\n");
+        res.end()
         
-            //belum pas posisi
-            res.write("data: [DONE]\n\n");
-            res.end()
+  
     }catch(error) {
 
         console.error("Server Error:", error);
